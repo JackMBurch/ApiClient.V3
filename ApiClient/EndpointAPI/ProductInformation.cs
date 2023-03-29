@@ -136,12 +136,22 @@ namespace ApiClient.EndpointAPI
 
         #region PackageTypeByQuantity
 
-        public async Task<string> PackageByQuantity(string digikeyPartNumber, int requestedQuantity)
+        public async Task<string> PackageByQuantity(string digikeyPartNumber, int requestedQuantity, string packagingPreference = null, string[] includes = null)
         {
             var resourcePath = "PackageTypeByQuantity/v3/Products";
 
             var encodedPN = HttpUtility.UrlEncode(digikeyPartNumber);
+
             var parameters = HttpUtility.UrlEncode($"requestedQuantity={requestedQuantity}");
+            if (packagingPreference != null)
+            {
+                parameters += $"&packagingPreference={HttpUtility.UrlEncode(packagingPreference)}";
+            }
+            if (includes != null)
+            {
+                var includesString = HttpUtility.UrlEncode(string.Join(",", includes));
+                parameters += $"&includes={includesString}";
+            }
 
             var fullPath = $"/{resourcePath}/{encodedPN}?{parameters}";
 
@@ -169,7 +179,7 @@ namespace ApiClient.EndpointAPI
             else
             {
                 var includesString = HttpUtility.UrlEncode(string.Join(",", includes));
-                var parameters = $"Inlcudes={includesString}";
+                var parameters = $"inlcudes={includesString}";
                 fullPath = $"/{resourcePath}/{encodedPN}?{parameters}";
             }
 
