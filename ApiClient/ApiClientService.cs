@@ -12,7 +12,7 @@
 //-----------------------------------------------------------------------
 
 using ApiClient.Constants;
-using ApiClient.EndpointAPI.ProductInformation;
+using ApiClient.EndpointAPI;
 using ApiClient.Exception;
 using ApiClient.Models;
 using ApiClient.OAuth2;
@@ -36,28 +36,12 @@ namespace ApiClient
             set => _clientSettings = value;
         }
 
-        private PartSearch _partSearch;
+        private ProductInformation _productInformation;
 
-        public PartSearch PartSearch
+        public ProductInformation ProductInformation
         {
-            get => _partSearch;
-            set => _partSearch = value;
-        }
-
-        private RecommendedParts _recommendedParts;
-
-        public RecommendedParts RecommendedParts
-        {
-            get => _recommendedParts;
-            set => _recommendedParts = value;
-        }
-
-        private PackageTypeByQuantity _packageTypeByQuantity;
-
-        public PackageTypeByQuantity PackageTypeByQuantity
-        {
-            get => _packageTypeByQuantity;
-            set => _packageTypeByQuantity = value;
+            get => _productInformation;
+            set => _productInformation = value;
         }
 
         /// <summary>
@@ -68,9 +52,7 @@ namespace ApiClient
         public ApiClientService(ApiClientSettings clientSettings)
         {
             ClientSettings = clientSettings ?? throw new ArgumentNullException(nameof(clientSettings));
-            _partSearch = new PartSearch(this);
-            _recommendedParts = new RecommendedParts(this);
-            _packageTypeByQuantity = new PackageTypeByQuantity(this);
+            _productInformation = new ProductInformation(this);
             Initialize();
         }
 

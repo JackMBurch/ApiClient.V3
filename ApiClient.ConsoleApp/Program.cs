@@ -61,7 +61,7 @@ namespace ApiClient.ConsoleApp
                 }
 
                 var client = new ApiClientService(settings);
-                var response = await client.PartSearch.KeywordSearch("P5555-ND");
+                var response = await client.ProductInformation.KeywordSearch("P5555-ND");
 
                 // In order to pretty print the json object we need to do the following
                 var jsonFormatted = JToken.Parse(response).ToString(Newtonsoft.Json.Formatting.Indented);

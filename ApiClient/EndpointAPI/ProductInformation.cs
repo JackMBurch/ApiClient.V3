@@ -1,9 +1,9 @@
 ﻿using ApiClient.Models;
 using System.Web;
 
-namespace ApiClient.EndpointAPI.ProductInformation
+namespace ApiClient.EndpointAPI
 {
-    public class PartSearch
+    public class ProductInformation
     {
         private ApiClientService _clientService;
 
@@ -13,10 +13,12 @@ namespace ApiClient.EndpointAPI.ProductInformation
             set => _clientService = value;
         }
 
-        public PartSearch(ApiClientService clientService)
+        public ProductInformation(ApiClientService clientService)
         {
             ClientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
         }
+
+        #region PartSearch
 
         public async Task<string> KeywordSearch(string keyword)
         {
@@ -110,5 +112,57 @@ namespace ApiClient.EndpointAPI.ProductInformation
 
             return ApiClientService.GetServiceResponse(getResponse).Result;
         }
+
+        #endregion
+
+        #region RecommendedParts
+
+        public async Task<string> RecommendedProducts(string digikeyPartNumber, int recordCount = 1)
+        {
+            var resourcePath = "Recommendations/v3/Products";
+
+            var encodedPN = HttpUtility.UrlEncode(digikeyPartNumber);
+            var parameters = $"RecordCount={recordCount}";
+
+            var fullPath = $"/{resourcePath}/{encodedPN}?{parameters}";
+
+            await _clientService.ResetExpiredAccessTokenIfNeeded();
+            var getResponse = await _clientService.GetAsync(fullPath);
+
+            return ApiClientService.GetServiceResponse(getResponse).Result;
+        }
+
+        #endregion
+
+        #region PackageTypeByQuantity
+
+        public async Task<string> PackageByQuantity(string digikeyPartNumber, int requestedQuantity)
+        {
+            var resourcePath = "PackageTypeByQuantity/v3/Products";
+
+            var encodedPN = HttpUtility.UrlEncode(digikeyPartNumber);
+            var parameters = $"requestedQuantity={requestedQuantity}";
+
+            var fullPath = $"/{resourcePath}/{encodedPN}?{parameters}";
+
+            await _clientService.ResetExpiredAccessTokenIfNeeded();
+            var getResponse = await _clientService.GetAsync(fullPath);
+
+            return ApiClientService.GetServiceResponse(getResponse).Result;
+        }
+
+        #endregion
+
+        #region ProductChangeNotifications
+
+
+
+        #endregion
+
+        #region ProductTracing
+
+
+
+        #endregion
     }
 }
