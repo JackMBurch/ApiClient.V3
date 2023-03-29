@@ -20,9 +20,19 @@ namespace ApiClient.EndpointAPI
 
         #region PartSearch
 
-        public async Task<string> KeywordSearch(string keyword)
+        public async Task<string> KeywordSearch(string keyword, string[]? includes = null)
         {
-            var resourcePath = "/Search/v3/Products/Keyword";
+            var resourcePath = "Search/v3/Products/Keyword";
+
+            var parameters = string.Empty;
+
+            if (includes != null)
+            {
+                var includesString = HttpUtility.UrlEncode(string.Join(",", includes));
+                parameters += $"?includes={includesString}";
+            }
+
+            var fullPath = $"/{resourcePath}{parameters}";
 
             var request = new KeywordSearchRequest
             {
@@ -31,7 +41,7 @@ namespace ApiClient.EndpointAPI
             };
 
             await _clientService.ResetExpiredAccessTokenIfNeeded();
-            var postResponse = await _clientService.PostAsJsonAsync(resourcePath, request);
+            var postResponse = await _clientService.PostAsJsonAsync(fullPath, request);
 
             return ApiClientService.GetServiceResponse(postResponse).Result;
         }
