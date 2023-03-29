@@ -183,7 +183,19 @@ namespace ApiClient.EndpointAPI
 
         #region ProductTracing
 
+        public async Task<string> ProductTracingDetails(string tracingID)
+        {
+            var resourcePath = "ProductTracing/v1/Details";
 
+            var encodedID = HttpUtility.UrlEncode(tracingID);
+
+            var fullPath = $"/{resourcePath}/{encodedID}";
+
+            await _clientService.ResetExpiredAccessTokenIfNeeded();
+            var getResponse = await _clientService.GetAsync(fullPath);
+
+            return ApiClientService.GetServiceResponse(getResponse).Result;
+        }
 
         #endregion
     }
