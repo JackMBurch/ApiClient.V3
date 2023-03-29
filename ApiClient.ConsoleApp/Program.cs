@@ -62,6 +62,7 @@ namespace ApiClient.ConsoleApp
 
                 var client = new ApiClientService(settings);
                 var response = await client.ProductInformation.KeywordSearch("P5555-ND");
+                //var response = await client.ProductInformation.ProductChangeNotifications("P0.0JTR-ND", new string[] { "PcnType", "PcnDescription" });
 
                 // In order to pretty print the json object we need to do the following
                 var jsonFormatted = JToken.Parse(response).ToString(Newtonsoft.Json.Formatting.Indented);

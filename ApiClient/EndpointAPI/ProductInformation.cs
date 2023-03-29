@@ -141,7 +141,7 @@ namespace ApiClient.EndpointAPI
             var resourcePath = "PackageTypeByQuantity/v3/Products";
 
             var encodedPN = HttpUtility.UrlEncode(digikeyPartNumber);
-            var parameters = $"requestedQuantity={requestedQuantity}";
+            var parameters = HttpUtility.UrlEncode($"requestedQuantity={requestedQuantity}");
 
             var fullPath = $"/{resourcePath}/{encodedPN}?{parameters}";
 
@@ -155,7 +155,29 @@ namespace ApiClient.EndpointAPI
 
         #region ProductChangeNotifications
 
+        public async Task<string> ProductChangeNotifications(string digikeyPartNumber, string[]? includes = null)
+        {
+            var resourcePath = "ChangeNotifications/v3/Products";
 
+            var encodedPN = HttpUtility.UrlEncode(digikeyPartNumber);
+
+            string fullPath;
+
+            if (includes == null)
+                fullPath = $"/{resourcePath}/{encodedPN}";
+
+            else
+            {
+                var includesString = HttpUtility.UrlEncode(string.Join(",", includes));
+                var parameters = $"Inlcudes={includesString}";
+                fullPath = $"/{resourcePath}/{encodedPN}?{parameters}";
+            }
+
+            await _clientService.ResetExpiredAccessTokenIfNeeded();
+            var getResponse = await _clientService.GetAsync(fullPath);
+
+            return ApiClientService.GetServiceResponse(getResponse).Result;
+        }
 
         #endregion
 
