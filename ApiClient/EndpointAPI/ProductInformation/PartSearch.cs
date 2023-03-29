@@ -63,5 +63,20 @@ namespace ApiClient.EndpointAPI.ProductInformation
 
             return ApiClientService.GetServiceResponse(getResponse).Result;
         }
+
+        public async Task<string> SuggestedParts(string partNumber)
+        {
+            var resourcePathPrefix = "Search/v3/Products";
+            var resourcePathSuffix = "WithSuggestedProducts";
+
+            var encodedPN = HttpUtility.UrlEncode(partNumber);
+
+            var fullPath = $"/{resourcePathPrefix}/{encodedPN}/{resourcePathSuffix}";
+
+            await _clientService.ResetExpiredAccessTokenIfNeeded();
+            var getResponse = await _clientService.GetAsync(fullPath);
+
+            return ApiClientService.GetServiceResponse(getResponse).Result;
+        }
     }
 }
