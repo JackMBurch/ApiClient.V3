@@ -52,6 +52,14 @@ namespace ApiClient
             set => _recommendedParts = value;
         }
 
+        private PackageTypeByQuantity _packageTypeByQuantity;
+
+        public PackageTypeByQuantity PackageTypeByQuantity
+        {
+            get => _packageTypeByQuantity;
+            set => _packageTypeByQuantity = value;
+        }
+
         /// <summary>
         ///     The httpclient which will be used for the api calls through the this instance
         /// </summary>
@@ -62,6 +70,7 @@ namespace ApiClient
             ClientSettings = clientSettings ?? throw new ArgumentNullException(nameof(clientSettings));
             _partSearch = new PartSearch(this);
             _recommendedParts = new RecommendedParts(this);
+            _packageTypeByQuantity = new PackageTypeByQuantity(this);
             Initialize();
         }
 
