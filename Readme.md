@@ -1,31 +1,42 @@
-# C# Api Client Library with OAuth2
+<div align="center">
+    <h1>C# DigiKey API Client Library</h1>
+
+![image](https://www.powercastco.com/wp-content/uploads/2018/06/Digi-Key-Logo-PNG-Large-High-Res-Transparent-600.png)
+
+</div>
+
+
 
 ### Features
 
 * Makes structured calls to the DigiKey API from .NET projects
-* Logs in users using the OAuth2 code flow
+* Handles the OAuth2 control flow, logs users in, refreshes tokens when needed, etc.
 
 ### Basic Usage
 
 ```csharp
 var settings = ApiClientSettings.CreateFromConfigFile();
 var client = new ApiClientService(settings);
-var postResponse = await client.KeywordSearch("P5555-ND");
-Console.WriteLine("response is {0}", postResponse);
+
+var response = await client.ProductInformation.KeywordSearch("P5555-ND");
+
+var jsonFormatted = JToken.Parse(response).ToString(Newtonsoft.Json.Formatting.Indented);
+Console.WriteLine($"Reponse is {jsonFormatted}");
 ```
 
 ### Project Contents
 
-* **ApiClient** - Client Library that contains the code to manage a config file with OAuth2 settings and classes to do the OAuth2 call and  an example call to DigiKey's KeywordSearch Api. 
-* **ApiClient.ConsoleApp** - Console app to test out programmatic refresh of access token when needed and also check if access token failed to work and then refresh and try again.
-* **OAuth2Service.ConsoleApp** - Console app to create the initial access token and refresh token.
+* **ApiClient** - Core client Library that manages a users OAuth2 config file, settings, and authorization flow. It also contains methods for endpoints belonging to the [Product Information API](https://developer.digikey.com/products/product-information).
+
+* **ApiClient.ConsoleApp** - Console app to test the refresh of access tokens using a sample KeywordSearch.
+* **OAuth2Service.ConsoleApp** - Console app to do the initial authorization and get a new access and refresh token.
 
 ### Getting Started  
 
-1. Download the zip file containing the solution ApiClient
-2. You will need to Register an application in order to create your unique Client ID, Client Secret, and OAuth Redirection URL. Follow the steps available on the API Portal here https://developer.digikey.com/
+1. Clone the repository or download and extract the zip file containing the ApiClient solution.
+2. You will need to register an application on the [DigiKey Developer Portal](https://developer.digikey.com/) in order to create your unique Client ID, Client Secret as well as to set your redirection URI.
 3. In the solution folder copy apiclientexample.config as apiclient.config, and update it with the ClientId, ClientSecret, and RedirectUri values from step 2.
-```
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
     <appSettings>
