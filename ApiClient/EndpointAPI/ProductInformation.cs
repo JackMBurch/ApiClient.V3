@@ -46,13 +46,21 @@ namespace ApiClient.EndpointAPI
             return ApiClientService.GetServiceResponse(postResponse).Result;
         }
 
-        public async Task<string> ProductDetails(string digikeyPartNumber)
+        public async Task<string> ProductDetails(string digikeyPartNumber, string[]? includes = null)
         {
             var resourcePath = "Search/v3/Products";
 
+            var parameters = string.Empty;
+
+            if (includes != null)
+            {
+                var includesString = HttpUtility.UrlEncode(string.Join(",", includes));
+                parameters += $"?includes={includesString}";
+            }
+
             var encodedPN = HttpUtility.UrlEncode(digikeyPartNumber);
 
-            var fullPath = $"/{resourcePath}/{encodedPN}";
+            var fullPath = $"/{resourcePath}/{encodedPN}{parameters}";
 
             await _clientService.ResetExpiredAccessTokenIfNeeded();
             var getResponse = await _clientService.GetAsync(fullPath);
