@@ -88,5 +88,15 @@ namespace ApiClient.EndpointAPI.ProductInformation
 
             return ApiClientService.GetServiceResponse(getResponse).Result;
         }
+
+        public async Task<string> Categories()
+        {
+            var resourcePath = "Search/v3/Categories";
+
+            await _clientService.ResetExpiredAccessTokenIfNeeded();
+            var getResponse = await _clientService.GetAsync($"{resourcePath}");
+
+            return ApiClientService.GetServiceResponse(getResponse).Result;
+        }
     }
 }
