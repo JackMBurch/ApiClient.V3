@@ -98,5 +98,17 @@ namespace ApiClient.EndpointAPI.ProductInformation
 
             return ApiClientService.GetServiceResponse(getResponse).Result;
         }
+
+        public async Task<string> CategoriesByID(int categoryID)
+        {
+            var resourcePathPrefix = "Search/v3/Categories";
+
+            var fullPath = $"/{resourcePathPrefix}/{categoryID}";
+
+            await _clientService.ResetExpiredAccessTokenIfNeeded();
+            var getResponse = await _clientService.GetAsync($"{fullPath}");
+
+            return ApiClientService.GetServiceResponse(getResponse).Result;
+        }
     }
 }
