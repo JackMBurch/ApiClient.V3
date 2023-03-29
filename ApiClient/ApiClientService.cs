@@ -61,6 +61,7 @@ namespace ApiClient
         {
             ClientSettings = clientSettings ?? throw new ArgumentNullException(nameof(clientSettings));
             _partSearch = new PartSearch(this);
+            _recommendedParts = new RecommendedParts(this);
             Initialize();
         }
 
