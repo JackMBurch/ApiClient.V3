@@ -117,12 +117,30 @@ namespace ApiClient.EndpointAPI
 
         #region RecommendedParts
 
-        public async Task<string> RecommendedProducts(string digikeyPartNumber, int recordCount = 1)
+        public async Task<string> RecommendedProducts(string digikeyPartNumber, int recordCount = 1, string[]? searchOptionList = null, bool excludeMarketPlaceProducts = false, string[]? includes = null)
         {
             var resourcePath = "Recommendations/v3/Products";
 
             var encodedPN = HttpUtility.UrlEncode(digikeyPartNumber);
-            var parameters = $"RecordCount={recordCount}";
+
+            var parameters = $"recordCount={recordCount}";
+
+            if (searchOptionList != null)
+            {
+                var optionListString = HttpUtility.UrlEncode(string.Join(",", searchOptionList));
+                parameters += $"&searchOptionList={optionListString}";
+            }
+
+            if (excludeMarketPlaceProducts == true)
+            {
+                parameters += $"&excludeMarketPlaceProducts=true";
+            }
+
+            if (includes != null)
+            {
+                var includesString = HttpUtility.UrlEncode(string.Join(",", includes));
+                parameters += $"&includes={includesString}";
+            }
 
             var fullPath = $"/{resourcePath}/{encodedPN}?{parameters}";
 
@@ -136,17 +154,19 @@ namespace ApiClient.EndpointAPI
 
         #region PackageTypeByQuantity
 
-        public async Task<string> PackageByQuantity(string digikeyPartNumber, int requestedQuantity, string packagingPreference = null, string[] includes = null)
+        public async Task<string> PackageByQuantity(string digikeyPartNumber, int requestedQuantity, string packagingPreference = null, string[]? includes = null)
         {
             var resourcePath = "PackageTypeByQuantity/v3/Products";
 
             var encodedPN = HttpUtility.UrlEncode(digikeyPartNumber);
 
             var parameters = HttpUtility.UrlEncode($"requestedQuantity={requestedQuantity}");
+
             if (packagingPreference != null)
             {
                 parameters += $"&packagingPreference={HttpUtility.UrlEncode(packagingPreference)}";
             }
+
             if (includes != null)
             {
                 var includesString = HttpUtility.UrlEncode(string.Join(",", includes));
