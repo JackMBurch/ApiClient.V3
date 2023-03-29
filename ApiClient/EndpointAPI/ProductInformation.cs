@@ -68,13 +68,20 @@ namespace ApiClient.EndpointAPI
             return ApiClientService.GetServiceResponse(getResponse).Result;
         }
 
-        public async Task<string> DigiReelPricing(string digiKeyPartNumber, int requestedQuantity)
+        public async Task<string> DigiReelPricing(string digiKeyPartNumber, int requestedQuantity, string[]? includes = null)
         {
             var resourcePathPrefix = "Search/v3/Products";
             var resourcePathSuffix = "DigiReelPricing";
 
             var encodedPN = HttpUtility.UrlEncode(digiKeyPartNumber);
+
             var parameters = $"requestedQuantity={requestedQuantity}";
+
+            if (includes != null)
+            {
+                var includesString = HttpUtility.UrlEncode(string.Join(",", includes));
+                parameters += $"&includes={includesString}";
+            }
 
             var fullPath = $"/{resourcePathPrefix}/{encodedPN}/{resourcePathSuffix}?{parameters}";
 
