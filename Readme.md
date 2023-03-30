@@ -1,7 +1,7 @@
 <div align="center">
     <h1>C# DigiKey API Client Library</h1>
 
-![image](https://www.powercastco.com/wp-content/uploads/2018/06/Digi-Key-Logo-PNG-Large-High-Res-Transparent-600.png)
+![image](https://i.imgur.com/gLgV1tB.png)
 
 </div>
 
