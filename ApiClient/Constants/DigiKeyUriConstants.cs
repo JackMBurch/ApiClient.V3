@@ -20,8 +20,15 @@ namespace ApiClient.Constants
     {
         public static Uri GetBaseAddress()
         {
-            var Production = bool.Parse(Environment.GetEnvironmentVariable("DigikeyProduction"));
-            return Production ? ProductionBaseAddress : SandboxBaseAddress;
+            try
+            {
+                var Production = bool.Parse(Environment.GetEnvironmentVariable("DigikeyProduction"));
+                return Production ? ProductionBaseAddress : SandboxBaseAddress;
+            }
+            catch
+            {
+                throw new System.Exception("Issue getting the DigikeyProduction environment variable. Make sure the variable is set to either true or false.");
+            }
         }
 
         public static Uri GetTokenEndpoint()
