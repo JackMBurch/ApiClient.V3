@@ -41,7 +41,7 @@ namespace ApiClient.Core.Configuration
                 var baseDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');
 
                 var solutionDir = new DirectoryInfo(Directory.GetCurrentDirectory());
-                while (solutionDir != null && !solutionDir.GetFiles("*.sln").Any())
+                while (!solutionDir.GetFiles("apiclient.config").Any())
                 {
                     solutionDir = solutionDir.Parent;
                 }
