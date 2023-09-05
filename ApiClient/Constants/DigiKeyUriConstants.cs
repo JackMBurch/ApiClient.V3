@@ -22,24 +22,24 @@ namespace ApiClient.Constants
         {
             try
             {
-                var Production = bool.Parse(Environment.GetEnvironmentVariable("DigikeyProduction"));
+                var Production = bool.Parse(Environment.GetEnvironmentVariable("DIGIKEY_PRODUCTION"));
                 return Production ? ProductionBaseAddress : SandboxBaseAddress;
             }
             catch
             {
-                throw new System.Exception("Issue getting the DigikeyProduction environment variable. Make sure the variable is set to either true or false.");
+                throw new System.Exception("Issue getting the DIGIKEY_PRODUCTION environment variable. Make sure the variable is set to either true or false.");
             }
         }
 
         public static Uri GetTokenEndpoint()
         {
-            var Production = bool.Parse(Environment.GetEnvironmentVariable("DigikeyProduction"));
+            var Production = bool.Parse(Environment.GetEnvironmentVariable("DIGIKEY_PRODUCTION"));
             return Production ? ProductionTokenEndpoint : SandboxTokenEndpoint;
         }
 
         public static Uri GetAuthorizationEndpoint()
         {
-            var Production = bool.Parse(Environment.GetEnvironmentVariable("DigikeyProduction"));
+            var Production = bool.Parse(Environment.GetEnvironmentVariable("DIGIKEY_PRODUCTION"));
             return Production ? ProductionAuthorizationEndpoint : SandboxAuthorizationEndpoint;
         }
 
