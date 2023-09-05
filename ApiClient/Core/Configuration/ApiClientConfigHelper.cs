@@ -36,26 +36,10 @@ namespace ApiClient.Core.Configuration
         {
             try
             {
-                // We are attempting to find the apiclient.config file in the solution folder for this project
-                // Using this method we can use the same apiclient.config for all the projects in this solution.
-                var baseDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');
-
-                var solutionDir = new DirectoryInfo(Directory.GetCurrentDirectory());
-                while (!solutionDir.GetFiles("apiclient.config").Any())
-                {
-                    solutionDir = solutionDir.Parent;
-                }
-
-                if (!File.Exists(Path.Combine(solutionDir.FullName, "apiclient.config")))
-                {
-                    throw new ApiException($"Unable to locate apiclient.config in solution folder {solutionDir.FullName}");
-                }
-
                 var map = new ExeConfigurationFileMap
                 {
-                    ExeConfigFilename = Path.Combine(solutionDir.FullName, "apiclient.config"),
+                    ExeConfigFilename = Path.Combine(Environment.GetEnvironmentVariable("WDRIVE_PATH")!, Environment.GetEnvironmentVariable("DIGIKEY_API_CONFIG_PATH")!)
                 };
-                Console.WriteLine($"map.ExeConfigFilename {map.ExeConfigFilename}");
                 _config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
             }
             catch (System.Exception ex)
