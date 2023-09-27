@@ -95,7 +95,7 @@ namespace ApiClient
             }
         }
 
-        public async Task<HttpResponseMessage> GetAsync(string resourcePath)
+        public async Task<HttpResponseMessage> GetAsync(string resourcePath, bool secondary = false)
         {
             _log.DebugFormat(">ApiClientService::GetAsync()");
             try
@@ -116,17 +116,13 @@ namespace ApiClient
                         _log.DebugFormat($"New Access token is {_clientSettings.AccessToken}");
 
                         //Only retry the first time.
-                        if (!response.RequestMessage.Headers.Contains(CustomHeader))
+                        if (response.StatusCode == HttpStatusCode.Unauthorized && secondary)
                         {
-                            HttpClient.DefaultRequestHeaders.Add(CustomHeader, CustomHeader);
-                            HttpClient.DefaultRequestHeaders.Authorization =
-                                new AuthenticationHeaderValue("Authorization", _clientSettings.AccessToken);
-                            return await GetAsync(resourcePath);
+                            throw new ApiException($"Inside method {nameof(PostAsJsonAsync)} we received an unexpected stale token response - during the retry for a call whose token we just refreshed {response.StatusCode}. Please reauthorize and restart the application.");
                         }
-                        else if (response.RequestMessage.Headers.Contains(CustomHeader))
-                        {
-                            throw new ApiException($"Inside method {nameof(GetAsync)} we received an unexpected stale token response - during the retry for a call whose token we just refreshed {response.StatusCode}. Please reauthorize and restart the application.");
-                        }
+                        Initialize();
+                        Console.WriteLine(_clientSettings.ToString());
+                        return await PostAsJsonAsync(resourcePath, true);
                     }
                 }
 
@@ -144,7 +140,7 @@ namespace ApiClient
             }
         }
 
-        public async Task<HttpResponseMessage> PostAsJsonAsync<T>(string resourcePath, T postRequest)
+        public async Task<HttpResponseMessage> PostAsJsonAsync<T>(string resourcePath, T postRequest, bool secondary = false)
         {
             _log.DebugFormat(">ApiClientService::PostAsJsonAsync()");
             try
@@ -165,17 +161,13 @@ namespace ApiClient
                         _log.DebugFormat($"New Access token is {_clientSettings.AccessToken}");
 
                         //Only retry the first time.
-                        if (!response.RequestMessage.Headers.Contains(CustomHeader))
-                        {
-                            HttpClient.DefaultRequestHeaders.Add(CustomHeader, CustomHeader);
-                            HttpClient.DefaultRequestHeaders.Authorization =
-                                new AuthenticationHeaderValue("Authorization", _clientSettings.AccessToken);
-                            return await PostAsJsonAsync(resourcePath, postRequest);
-                        }
-                        else if (response.RequestMessage.Headers.Contains(CustomHeader))
+                        if (response.StatusCode == HttpStatusCode.Unauthorized && secondary)
                         {
                             throw new ApiException($"Inside method {nameof(PostAsJsonAsync)} we received an unexpected stale token response - during the retry for a call whose token we just refreshed {response.StatusCode}. Please reauthorize and restart the application.");
                         }
+                        Initialize();
+                        Console.WriteLine(_clientSettings.ToString());
+                        return await PostAsJsonAsync(resourcePath, postRequest, true);
                     }
                 }
 
