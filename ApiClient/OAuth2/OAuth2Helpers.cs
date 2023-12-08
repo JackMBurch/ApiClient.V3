@@ -39,7 +39,7 @@ namespace ApiClient.OAuth2
         public static bool IsTokenStale(string content)
         {
             var errors = JsonConvert.DeserializeObject<OAuth2Error>(content);
-            return (errors.HttpMessage.ToLower().Contains("unauthorized") || errors.HttpMessage.ToLower().Contains("invalid"));
+            return errors.HttpMessage.Contains("unauthorized", StringComparison.CurrentCultureIgnoreCase) || errors.HttpMessage.Contains("invalid", StringComparison.CurrentCultureIgnoreCase);
         }
 
         /// <summary>

@@ -80,11 +80,11 @@ namespace ApiClient.OAuth2
             // Build up the body for the token request
             var body = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(OAuth2Constants.Code, code),
-                new KeyValuePair<string, string>(OAuth2Constants.RedirectUri, ClientSettings.RedirectUri),
-                new KeyValuePair<string, string>(OAuth2Constants.ClientId, ClientSettings.ClientId),
-                new KeyValuePair<string, string>(OAuth2Constants.ClientSecret, ClientSettings.ClientSecret),
-                new KeyValuePair<string, string>(OAuth2Constants.GrantType,
+                new(OAuth2Constants.Code, code),
+                new(OAuth2Constants.RedirectUri, ClientSettings.RedirectUri),
+                new(OAuth2Constants.ClientId, ClientSettings.ClientId),
+                new(OAuth2Constants.ClientSecret, ClientSettings.ClientSecret),
+                new(OAuth2Constants.GrantType,
                                                  OAuth2Constants.GrantTypes.AuthorizationCode)
             };
 
